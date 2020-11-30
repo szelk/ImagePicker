@@ -25,6 +25,7 @@ class Config() : Parcelable {
     var isFolderMode = false
     var isShowNumberIndicator = false
     var isShowCamera = false
+    var isStartWithCamera = false
     var maxSize = MAX_SIZE
     lateinit var doneTitle: String
     lateinit var folderTitle: String
@@ -49,6 +50,7 @@ class Config() : Parcelable {
         isFolderMode = parcel.readByte() != 0.toByte()
         isShowNumberIndicator = parcel.readByte() != 0.toByte()
         isShowCamera = parcel.readByte() != 0.toByte()
+        isStartWithCamera = parcel.readByte() != 0.toByte()
         maxSize = parcel.readInt()
         doneTitle = parcel.readString()!!
         folderTitle = parcel.readString()!!
@@ -131,6 +133,7 @@ class Config() : Parcelable {
         parcel.writeByte(if (isFolderMode) 1 else 0)
         parcel.writeByte(if (isShowNumberIndicator) 1 else 0)
         parcel.writeByte(if (isShowCamera) 1 else 0)
+        parcel.writeByte(if (isStartWithCamera) 1 else 0)
         parcel.writeInt(maxSize)
         parcel.writeString(doneTitle)
         parcel.writeString(folderTitle)

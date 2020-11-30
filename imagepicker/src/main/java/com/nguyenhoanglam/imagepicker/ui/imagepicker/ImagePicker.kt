@@ -226,6 +226,7 @@ class ImagePicker(builder: Builder) {
             config.isFolderMode = true
             config.isShowNumberIndicator = false
             config.isShowCamera = true
+            config.isStartWithCamera = true
             config.maxSize = Config.MAX_SIZE
             config.doneTitle = resources.getString(R.string.imagepicker_action_done)
             config.folderTitle = resources.getString(R.string.imagepicker_title_folder)
