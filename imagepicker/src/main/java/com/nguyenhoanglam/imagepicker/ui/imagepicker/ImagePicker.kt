@@ -25,7 +25,7 @@ class ImagePicker(builder: Builder) {
         override fun start() {
             val intent = intent
             val requestCode = if (config.requestCode != Config.RC_PICK_IMAGES) config.requestCode else Config.RC_PICK_IMAGES
-            if (!config.isCameraOnly || !config.isStartWithCamera) {
+            if (!config.isCameraOnly && !config.isStartWithCamera) {
                 activity.startActivityForResult(intent, requestCode)
             } else {
                 activity.overridePendingTransition(0, 0)
@@ -36,7 +36,7 @@ class ImagePicker(builder: Builder) {
         override val intent: Intent
             get() {
                 val intent: Intent
-                if (!config.isCameraOnly || !config.isStartWithCamera) {
+                if (!config.isCameraOnly && !config.isStartWithCamera) {
                     intent = Intent(activity, ImagePickerActivity::class.java)
                     intent.putExtra(Config.EXTRA_CONFIG, config)
                 } else {
@@ -53,7 +53,7 @@ class ImagePicker(builder: Builder) {
         override fun start() {
             val intent = intent
             val requestCode = if (config.requestCode != Config.RC_PICK_IMAGES) config.requestCode else Config.RC_PICK_IMAGES
-            if (!config.isCameraOnly || !config.isStartWithCamera) {
+            if (!config.isCameraOnly && !config.isStartWithCamera) {
                 fragment.startActivityForResult(intent, requestCode)
             } else {
                 fragment.activity?.overridePendingTransition(0, 0)
@@ -64,7 +64,7 @@ class ImagePicker(builder: Builder) {
         override val intent: Intent
             get() {
                 val intent: Intent
-                if (!config.isCameraOnly || !config.isStartWithCamera) {
+                if (!config.isCameraOnly && !config.isStartWithCamera) {
                     intent = Intent(fragment.activity, ImagePickerActivity::class.java)
                     intent.putExtra(Config.EXTRA_CONFIG, config)
                 } else {
@@ -210,7 +210,8 @@ class ImagePicker(builder: Builder) {
             val pm = context.packageManager
             val ai: ApplicationInfo?
             ai = try {
-                pm.getApplicationInfo(context.applicationContext.packageName ?: "", 0)
+                pm.getApplicationInfo(context.applicationContext.packageName
+                        ?: "", 0)
             } catch (e: PackageManager.NameNotFoundException) {
                 null
             }

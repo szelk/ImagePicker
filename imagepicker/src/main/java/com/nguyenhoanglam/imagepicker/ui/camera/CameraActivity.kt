@@ -157,7 +157,7 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
-    private fun getActivity() :Activity {
+    private fun getActivity(): Activity {
         return this
     }
 
@@ -167,10 +167,10 @@ class CameraActivity : AppCompatActivity() {
                 val data = Intent()
                 data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images)
                 setResult(Activity.RESULT_OK, data)
-                if(config!!.isStartWithCamera && !config!!.isCameraOnly){
-                val intent = Intent(getActivity(), ImagePickerActivity::class.java)
-                intent.putExtra(Config.EXTRA_CONFIG, config)
-                startActivity(intent)
+                if (config!!.isStartWithCamera && !config!!.isCameraOnly) {
+                    val intent = Intent(getActivity(), ImagePickerActivity::class.java)
+                    intent.putExtra(Config.EXTRA_CONFIG, config)
+                    startActivity(intent)
                 }
                 finish()
             }
