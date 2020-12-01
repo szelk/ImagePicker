@@ -131,9 +131,6 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
 
     private fun fetchData() {
         viewModel.fetchImages()
-        if(config!!.isStartWithCamera) {
-            captureImageWithPermission()
-        }
     }
 
     override fun onBackPressed() {
