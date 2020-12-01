@@ -179,6 +179,11 @@ class CameraActivity : AppCompatActivity() {
                 val data = Intent()
                 data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, arrayListOf())
                 setResult(Activity.RESULT_OK, data)
+                if (config!!.isStartWithCamera && !config!!.isCameraOnly) {
+                    val intent = Intent(getActivity(), ImagePickerActivity::class.java)
+                    intent.putExtra(Config.EXTRA_CONFIG, config)
+                    startActivity(intent)
+                }
                 finish()
             }
 
@@ -187,6 +192,11 @@ class CameraActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         setResult(Activity.RESULT_CANCELED)
+        if (config!!.isStartWithCamera && !config!!.isCameraOnly) {
+            val intent = Intent(getActivity(), ImagePickerActivity::class.java)
+            intent.putExtra(Config.EXTRA_CONFIG, config)
+            startActivity(intent)
+        }
         finish()
     }
 
