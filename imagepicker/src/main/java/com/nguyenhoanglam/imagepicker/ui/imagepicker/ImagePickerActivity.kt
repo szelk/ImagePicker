@@ -73,8 +73,8 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
 
         val initialFragment = if (config!!.isFolderMode) FolderFragment.newInstance() else ImageFragment.newInstance()
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, initialFragment)
-            .commit()
+                .replace(R.id.fragmentContainer, initialFragment)
+                .commit()
     }
 
 
@@ -225,9 +225,9 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
 
     override fun onFolderClick(folder: Folder) {
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragmentContainer, ImageFragment.newInstance(folder.bucketId))
-            .addToBackStack(null)
-            .commit()
+                .add(R.id.fragmentContainer, ImageFragment.newInstance(folder.bucketId))
+                .addToBackStack(null)
+                .commit()
         toolbar.setTitle(folder.name)
     }
 

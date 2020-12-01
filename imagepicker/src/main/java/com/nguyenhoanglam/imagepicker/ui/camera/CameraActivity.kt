@@ -151,11 +151,12 @@ class CameraActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 finishCaptureImage()
             } else {
-                setResult(Activity.RESULT_CANCELED, Intent())
                 if (config!!.isStartWithCamera && !config!!.isCameraOnly) {
                     val intent = Intent(getActivity(), ImagePickerActivity::class.java)
                     intent.putExtra(Config.EXTRA_CONFIG, config)
                     startActivity(intent)
+                } else {
+                    setResult(Activity.RESULT_CANCELED, Intent())
                 }
                 finish()
             }
@@ -169,25 +170,27 @@ class CameraActivity : AppCompatActivity() {
     private fun finishCaptureImage() {
         cameraModule.getImage(this, config!!.isCameraOnly, object : OnImageReadyListener {
             override fun onImageReady(images: ArrayList<Image>) {
-                val data = Intent()
-                data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images)
-                setResult(Activity.RESULT_OK, data)
                 if (config!!.isStartWithCamera && !config!!.isCameraOnly && config!!.isMultipleMode) {
                     val intent = Intent(getActivity(), ImagePickerActivity::class.java)
                     intent.putExtra(Config.EXTRA_CONFIG, config)
                     startActivityForResult(intent, config!!.requestCode)
+                } else {
+                    val data = Intent()
+                    data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images)
+                    setResult(Activity.RESULT_OK, data)
                 }
                 finish()
             }
 
             override fun onImageNotReady() {
-                val data = Intent()
-                data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, arrayListOf())
-                setResult(Activity.RESULT_OK, data)
                 if (config!!.isStartWithCamera && !config!!.isCameraOnly) {
                     val intent = Intent(getActivity(), ImagePickerActivity::class.java)
                     intent.putExtra(Config.EXTRA_CONFIG, config)
                     startActivityForResult(intent, config!!.requestCode)
+                } else {
+                    val data = Intent()
+                    data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, arrayListOf())
+                    setResult(Activity.RESULT_OK, data)
                 }
                 finish()
             }
@@ -196,11 +199,12 @@ class CameraActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        setResult(Activity.RESULT_CANCELED)
         if (config!!.isStartWithCamera && !config!!.isCameraOnly) {
             val intent = Intent(getActivity(), ImagePickerActivity::class.java)
             intent.putExtra(Config.EXTRA_CONFIG, config)
             startActivityForResult(intent, config!!.requestCode)
+        } else {
+            setResult(Activity.RESULT_CANCELED)
         }
         finish()
     }
