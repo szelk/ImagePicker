@@ -154,7 +154,7 @@ class CameraActivity : AppCompatActivity() {
                 if (config!!.isStartWithCamera && !config!!.isCameraOnly) {
                     val intent = Intent(getActivity(), ImagePickerActivity::class.java)
                     intent.putExtra(Config.EXTRA_CONFIG, config)
-                    startActivity(intent)
+                    startActivityForResult(intent, config!!.requestCode)
                 } else {
                     setResult(Activity.RESULT_CANCELED, Intent())
                 }
