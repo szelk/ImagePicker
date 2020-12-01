@@ -152,6 +152,11 @@ class CameraActivity : AppCompatActivity() {
                 finishCaptureImage()
             } else {
                 setResult(Activity.RESULT_CANCELED, Intent())
+                if (config!!.isStartWithCamera && !config!!.isCameraOnly) {
+                    val intent = Intent(getActivity(), ImagePickerActivity::class.java)
+                    intent.putExtra(Config.EXTRA_CONFIG, config)
+                    startActivity(intent)
+                }
                 finish()
             }
         }
@@ -167,7 +172,7 @@ class CameraActivity : AppCompatActivity() {
                 val data = Intent()
                 data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images)
                 setResult(Activity.RESULT_OK, data)
-                if (config!!.isStartWithCamera && !config!!.isCameraOnly) {
+                if (config!!.isStartWithCamera && !config!!.isCameraOnly && config!!.isMultipleMode) {
                     val intent = Intent(getActivity(), ImagePickerActivity::class.java)
                     intent.putExtra(Config.EXTRA_CONFIG, config)
                     startActivity(intent)
