@@ -36,6 +36,7 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
     private val backClickListener = View.OnClickListener { onBackPressed() }
     private val cameraClickListener = View.OnClickListener { captureImageWithPermission() }
     private val doneClickListener = View.OnClickListener { onDone() }
+    private var photoCaptured = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +44,7 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
             finish()
             return
         }
+        photoCaptured = savedInstanceState?.getBoolean("photoCaptured", false) == true;
 
         config = intent.getParcelableExtra(Config.EXTRA_CONFIG)
         setContentView(R.layout.imagepicker_activity_imagepicker)
@@ -54,6 +56,10 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
         })
 
         setupViews()
+
+        if (!photoCaptured) {
+            captureImageWithPermission()
+        }
     }
 
     override fun onResume() {
@@ -73,8 +79,8 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
 
         val initialFragment = if (config!!.isFolderMode) FolderFragment.newInstance() else ImageFragment.newInstance()
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, initialFragment)
-            .commit()
+                .replace(R.id.fragmentContainer, initialFragment)
+                .commit()
     }
 
 
@@ -200,18 +206,21 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Config.RC_CAPTURE_IMAGE && resultCode == Activity.RESULT_OK) {
-            cameraModule.getImage(this, config!!.isCameraOnly, object : OnImageReadyListener {
-                override fun onImageReady(images: ArrayList<Image>) {
-                    fetchDataWithPermission()
-                }
+        if (requestCode == Config.RC_CAPTURE_IMAGE) {
+            photoCaptured = true
+            if (resultCode == Activity.RESULT_OK) {
+                cameraModule.getImage(this, config!!.isCameraOnly, object : OnImageReadyListener {
+                    override fun onImageReady(images: ArrayList<Image>) {
+                        fetchDataWithPermission()
+                    }
 
-                override fun onImageNotReady() {
-                    logger?.e("Could not get captured image's path")
-                    fetchDataWithPermission()
-                }
+                    override fun onImageNotReady() {
+                        logger?.e("Could not get captured image's path")
+                        fetchDataWithPermission()
+                    }
 
-            })
+                })
+            }
         }
     }
 
@@ -225,9 +234,9 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
 
     override fun onFolderClick(folder: Folder) {
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragmentContainer, ImageFragment.newInstance(folder.bucketId))
-            .addToBackStack(null)
-            .commit()
+                .add(R.id.fragmentContainer, ImageFragment.newInstance(folder.bucketId))
+                .addToBackStack(null)
+                .commit()
         toolbar.setTitle(folder.name)
     }
 
@@ -237,5 +246,10 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
 
     override fun onSingleModeImageSelected(image: Image) {
         finishPickImages(ImageHelper.singleListFromImage(image))
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("photoCaptured", photoCaptured)
     }
 }
