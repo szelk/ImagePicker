@@ -25,6 +25,7 @@ import com.nguyenhoanglam.imagepicker.helper.PreferenceHelper.isFirstTimeAskingP
 import com.nguyenhoanglam.imagepicker.helper.ToastHelper
 import com.nguyenhoanglam.imagepicker.model.Config
 import com.nguyenhoanglam.imagepicker.model.Image
+import com.nguyenhoanglam.imagepicker.ui.imagepicker.ImagePickerActivity
 import kotlinx.android.synthetic.main.imagepicker_activity_camera.*
 import java.util.*
 
@@ -156,12 +157,21 @@ class CameraActivity : AppCompatActivity() {
         }
     }
 
+    private fun getActivity() :Activity {
+        return this
+    }
+
     private fun finishCaptureImage() {
         cameraModule.getImage(this, config!!.isCameraOnly, object : OnImageReadyListener {
             override fun onImageReady(images: ArrayList<Image>) {
                 val data = Intent()
                 data.putParcelableArrayListExtra(Config.EXTRA_IMAGES, images)
                 setResult(Activity.RESULT_OK, data)
+                if(config!!.isStartWithCamera && !config!!.isCameraOnly){
+                val intent = Intent(getActivity(), ImagePickerActivity::class.java)
+                intent.putExtra(Config.EXTRA_CONFIG, config)
+                startActivity(intent)
+                }
                 finish()
             }
 

@@ -146,6 +146,11 @@ class ImagePicker(builder: Builder) {
             return this
         }
 
+        fun setStartWithCamera(isStartWithCamera: Boolean): Builder {
+            config.isStartWithCamera = isStartWithCamera
+            return this
+        }
+
         fun setMaxSize(maxSize: Int): Builder {
             config.maxSize = maxSize
             return this
