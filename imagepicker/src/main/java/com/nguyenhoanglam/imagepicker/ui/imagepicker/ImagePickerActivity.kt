@@ -10,6 +10,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -37,6 +38,8 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
     private val cameraClickListener = View.OnClickListener { captureImageWithPermission() }
     private val doneClickListener = View.OnClickListener { onDone() }
     private var photoCaptured = false
+    private val handler = Handler()
+    private val startCameraAction = { captureImageWithPermission() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +61,8 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
         setupViews()
 
         if (!photoCaptured) {
-            captureImageWithPermission()
+            cancelStartCameraActionCallback()
+            handler.postDelayed(startCameraAction, 500)
         }
     }
 
@@ -82,7 +86,6 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
                 .replace(R.id.fragmentContainer, initialFragment)
                 .commit()
     }
-
 
     private fun fetchDataWithPermission() {
         val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -135,12 +138,18 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        cancelStartCameraActionCallback()
+    }
+
     private fun fetchData() {
         viewModel.fetchImages()
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
+        cancelStartCameraActionCallback()
         val fragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
         if (fragment != null && fragment is FolderFragment) {
             toolbar.setTitle(config!!.folderTitle)
@@ -251,5 +260,9 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("photoCaptured", photoCaptured)
+    }
+
+    fun cancelStartCameraActionCallback() {
+        handler.removeCallbacks(startCameraAction)
     }
 }
