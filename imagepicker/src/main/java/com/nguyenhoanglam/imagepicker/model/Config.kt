@@ -21,6 +21,7 @@ class Config() : Parcelable {
     private lateinit var backgroundColor: String
     private lateinit var indicatorColor: String
     var isCameraOnly = false
+    var isStartWithCamera = false
     var isMultipleMode = false
     var isFolderMode = false
     var isShowNumberIndicator = false
@@ -45,6 +46,7 @@ class Config() : Parcelable {
         backgroundColor = parcel.readString()!!
         indicatorColor = parcel.readString()!!
         isCameraOnly = parcel.readByte() != 0.toByte()
+        isStartWithCamera = parcel.readByte() != 0.toByte()
         isMultipleMode = parcel.readByte() != 0.toByte()
         isFolderMode = parcel.readByte() != 0.toByte()
         isShowNumberIndicator = parcel.readByte() != 0.toByte()
@@ -127,6 +129,7 @@ class Config() : Parcelable {
         parcel.writeString(backgroundColor)
         parcel.writeString(indicatorColor)
         parcel.writeByte(if (isCameraOnly) 1 else 0)
+        parcel.writeByte(if (isStartWithCamera) 1 else 0)
         parcel.writeByte(if (isMultipleMode) 1 else 0)
         parcel.writeByte(if (isFolderMode) 1 else 0)
         parcel.writeByte(if (isShowNumberIndicator) 1 else 0)

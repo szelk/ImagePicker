@@ -126,6 +126,11 @@ class ImagePicker(builder: Builder) {
             return this
         }
 
+        fun setStartWithCamera(isStartWithCamera: Boolean): Builder {
+            config.isStartWithCamera = isStartWithCamera
+            return this
+        }
+
         fun setMultipleMode(isMultipleMode: Boolean): Builder {
             config.isMultipleMode = isMultipleMode
             return this
@@ -222,6 +227,7 @@ class ImagePicker(builder: Builder) {
             config.setBackgroundColor("#424242")
             config.setIndicatorColor("#1976D2")
             config.isCameraOnly = false
+            config.isStartWithCamera = false
             config.isMultipleMode = true
             config.isFolderMode = true
             config.isShowNumberIndicator = false

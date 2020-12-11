@@ -60,7 +60,7 @@ class ImagePickerActivity : AppCompatActivity(), OnFolderClickListener, OnImageS
 
         setupViews()
 
-        if (!photoCaptured) {
+        if (config!!.isStartWithCamera && !photoCaptured) {
             cancelStartCameraActionCallback()
             handler.postDelayed(startCameraAction, 500)
         }
